@@ -6,17 +6,69 @@
     <title>Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+
+    <!-- ==================== STYLES ==================== -->
     <style>
-      /* Sidebar Collapse Logic */
-      #sidebar {
-        transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1); /* Smoother easing curve */
-        overflow-x: hidden; /* Prevents horizontal scrollbar during transition */
-      }
-      #sidebar.collapsed {
-        width: 5rem; /* 80px */
+      /* --- 1. Theme Variables (Easy Styling) --- */
+      :root {
+        /* Backgrounds */
+        --bg-body: #f9fafb;
+        --bg-sidebar: #ffffff;
+        --bg-header: #ffffff;
+        --bg-card: #ffffff;
+        --bg-input: #f9fafb;
+        --bg-tooltip: #1f2937;
+
+        /* Brand / Primary Colors */
+        --color-primary: #4f46e5;
+        --color-primary-hover: #4338ca;
+        --color-primary-light: #eef2ff;
+        --color-primary-text: #4338ca;
+
+        /* Text Colors */
+        --text-main: #111827;
+        --text-muted: #4b5563;
+        --text-faint: #6b7280;
+        --text-placeholder: #9ca3af;
+        --text-white: #ffffff;
+
+        /* Borders */
+        --border-color: #e5e7eb;
+
+        /* Danger / Logout */
+        --color-danger: #dc2626;
+        --color-danger-light: #fef2f2;
+
+        /* Sizing */
+        --sidebar-width: 16rem;
+        --sidebar-collapsed-width: 5rem;
+        --header-height: 4rem;
       }
 
-      /* Smooth text and gap transitions */
+      /* --- 2. Base & Layout --- */
+      body {
+        background-color: var(--bg-body);
+        color: var(--text-main);
+      }
+
+      #sidebar {
+        width: var(--sidebar-width);
+        background-color: var(--bg-sidebar);
+        border-right: 1px solid var(--border-color);
+        transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #sidebar.collapsed {
+        width: var(--sidebar-collapsed-width);
+      }
+
+      .main-header {
+        height: var(--header-height);
+        background-color: var(--bg-header);
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      /* --- 3. Sidebar Animation Logic --- */
       .nav-item {
         transition:
           padding 300ms ease,
@@ -33,55 +85,110 @@
         opacity: 1;
         overflow: hidden;
         white-space: nowrap;
-        margin-left: 0.75rem; /* Equivalent to gap-3 */
+        margin-left: 0.75rem;
       }
 
-      /* Collapsed state animations */
       #sidebar.collapsed .nav-text,
       #sidebar.collapsed .sidebar-title-rest {
         max-width: 0;
         opacity: 0;
-        margin-left: 0; /* Smoothly removes the gap */
+        margin-left: 0;
       }
 
       #sidebar.collapsed .nav-item {
         justify-content: center;
         padding-left: 0;
         padding-right: 0;
-        gap: 0; /* Removes gap so icon centers perfectly */
+        gap: 0;
       }
 
       #sidebar.collapsed #toggle-icon {
         transform: rotate(180deg);
       }
+
+      .logo-container {
+        overflow: hidden;
+      }
+
+      /* --- 4. Tooltip Styles --- */
+      .nav-tooltip {
+        position: absolute;
+        left: calc(100% + 16px);
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--bg-tooltip);
+        color: var(--text-white);
+        font-size: 12px;
+        padding: 6px 12px;
+        border-radius: 6px;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 200ms ease;
+        z-index: 50;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-tooltip::before {
+        content: "";
+        position: absolute;
+        right: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        border: 5px solid transparent;
+        border-right-color: var(--bg-tooltip);
+      }
+
+      #sidebar.collapsed .nav-item:hover .nav-tooltip,
+      .toggle-btn:hover .nav-tooltip {
+        opacity: 1;
+      }
+
+      /* --- 5. Form & Component Overrides --- */
+      .form-input {
+        background-color: var(--bg-input);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+      }
+
+      .form-input::placeholder {
+        color: var(--text-placeholder);
+      }
+
+      .form-input:focus {
+        border-color: var(--color-primary);
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+        box-shadow: 0 0 0 3px var(--color-primary);
+      }
     </style>
   </head>
-  <body
-    class="bg-gray-50 text-gray-900 font-sans antialiased h-screen overflow-hidden"
-  >
-    <!-- SHELL -->
+
+  <body class="font-sans antialiased h-screen overflow-hidden">
+    <!-- ==================== HTML STRUCTURE ==================== -->
     <div class="flex h-screen">
-      <!-- SIDEBAR -->
+      <!-- === SIDEBAR === -->
       <aside
         id="sidebar"
-        class="w-64 bg-white border-r border-gray-200 flex flex-col flex-shrink-0 relative shadow-sm"
+        class="flex flex-col flex-shrink-0 relative shadow-sm"
       >
-        <!-- Top: Logo & Resort Name -->
+        <!-- Logo -->
         <div
-          class="h-16 flex items-center justify-center border-b border-gray-200 overflow-hidden"
+          class="logo-container h-16 flex items-center justify-center border-b border-[var(--border-color)]"
         >
           <div class="flex items-center px-4">
             <span
-              class="iconify text-2xl text-indigo-600 flex-shrink-0"
+              class="iconify text-2xl text-[var(--color-primary)] flex-shrink-0"
               data-icon="lucide:tent"
             ></span>
-            <span class="sidebar-title-rest text-lg font-semibold text-gray-900"
+            <span
+              class="sidebar-title-rest text-lg font-semibold text-[var(--text-main)]"
               >Riverside Resort</span
             >
           </div>
         </div>
 
-        <!-- Navigation -->
+        <!-- Main Navigation -->
         <nav
           class="flex-1 py-4 px-2 space-y-1 overflow-y-auto overflow-x-hidden"
         >
@@ -89,35 +196,37 @@
             href="#"
             onclick="switchTab('homepage', this)"
             id="nav-homepage"
-            class="nav-item main-nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg bg-indigo-50 text-indigo-700 transition-colors"
+            class="nav-item main-nav-link group relative flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[var(--color-primary-light)] text-[var(--color-primary-text)] transition-colors"
           >
             <span
-              class="iconify text-xl flex-shrink-0 text-indigo-600"
+              class="iconify text-xl flex-shrink-0 text-[var(--color-primary)]"
               data-icon="lucide:layout-dashboard"
             ></span>
             <span class="nav-text text-sm whitespace-nowrap font-medium"
               >Homepage</span
             >
+            <span class="nav-tooltip">Homepage</span>
           </a>
 
           <a
             href="#"
             onclick="switchTab('about-owner', this)"
             id="nav-about-owner"
-            class="nav-item main-nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+            class="nav-item main-nav-link group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-gray-100 transition-colors"
           >
             <span
               class="iconify text-xl flex-shrink-0"
               data-icon="lucide:user"
             ></span>
             <span class="nav-text text-sm whitespace-nowrap">About Owner</span>
+            <span class="nav-tooltip">About Owner</span>
           </a>
 
           <a
             href="#"
             onclick="switchTab('edit-property', this)"
             id="nav-edit-property"
-            class="nav-item main-nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+            class="nav-item main-nav-link group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-gray-100 transition-colors"
           >
             <span
               class="iconify text-xl flex-shrink-0"
@@ -126,171 +235,183 @@
             <span class="nav-text text-sm whitespace-nowrap"
               >Edit Property</span
             >
+            <span class="nav-tooltip">Edit Property</span>
           </a>
 
           <a
             href="#"
             onclick="switchTab('contact-us', this)"
             id="nav-contact-us"
-            class="nav-item main-nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+            class="nav-item main-nav-link group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-gray-100 transition-colors"
           >
             <span
               class="iconify text-xl flex-shrink-0"
               data-icon="lucide:mail"
             ></span>
             <span class="nav-text text-sm whitespace-nowrap">Contact Us</span>
+            <span class="nav-tooltip">Contact Us</span>
           </a>
 
           <a
             href="#"
             onclick="switchTab('social-links', this)"
             id="nav-social-links"
-            class="nav-item main-nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+            class="nav-item main-nav-link group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-gray-100 transition-colors"
           >
             <span
               class="iconify text-xl flex-shrink-0"
               data-icon="lucide:share-2"
             ></span>
             <span class="nav-text text-sm whitespace-nowrap">Social Links</span>
+            <span class="nav-tooltip">Social Links</span>
           </a>
         </nav>
 
         <!-- Bottom Navigation -->
-        <div class="py-4 px-2 border-t border-gray-200 space-y-1">
+        <div class="py-4 px-2 border-t border-[var(--border-color)] space-y-1">
           <a
             href="#"
             onclick="switchTab('profile', this)"
             id="nav-profile"
-            class="nav-item main-nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+            class="nav-item main-nav-link group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-gray-100 transition-colors"
           >
             <span
               class="iconify text-xl flex-shrink-0"
               data-icon="lucide:user-circle"
             ></span>
             <span class="nav-text text-sm whitespace-nowrap">Profile</span>
+            <span class="nav-tooltip">Profile</span>
           </a>
 
           <a
             href="#"
             onclick="switchTab('settings', this)"
             id="nav-settings"
-            class="nav-item main-nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+            class="nav-item main-nav-link group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-gray-100 transition-colors"
           >
             <span
               class="iconify text-xl flex-shrink-0"
               data-icon="lucide:settings"
             ></span>
             <span class="nav-text text-sm whitespace-nowrap">Setting</span>
+            <span class="nav-tooltip">Setting</span>
           </a>
 
           <a
             href="#"
-            class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:text-red-600 hover:bg-red-50 transition-colors"
+            class="nav-item group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--color-danger)] hover:bg-[var(--color-danger-light)] transition-colors"
           >
             <span
               class="iconify text-xl flex-shrink-0"
               data-icon="lucide:log-out"
             ></span>
             <span class="nav-text text-sm whitespace-nowrap">Logout</span>
+            <span class="nav-tooltip">Logout</span>
           </a>
         </div>
 
-        <!-- Collapse Toggle Button (Vertically Centered) -->
+        <!-- Collapse Toggle -->
         <button
           onclick="toggleSidebar()"
-          class="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-white border border-gray-300 rounded-full flex items-center justify-center text-gray-500 hover:text-gray-900 hover:border-gray-400 transition-colors z-10 shadow-sm"
+          class="toggle-btn group absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[var(--bg-sidebar)] border border-[var(--border-color)] rounded-full flex items-center justify-center text-[var(--text-faint)] hover:text-[var(--text-main)] hover:border-gray-400 transition-all z-10 shadow-sm"
         >
           <span
             id="toggle-icon"
             class="iconify text-sm transition-transform duration-300"
             data-icon="lucide:chevron-left"
           ></span>
+          <span class="nav-tooltip" id="toggle-tooltip">Collapse Sidebar</span>
         </button>
       </aside>
 
-      <!-- MAIN AREA -->
+      <!-- === MAIN AREA === -->
       <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <!-- HEADER -->
+        <!-- Header -->
         <header
-          class="h-16 bg-white border-b border-gray-200 flex-shrink-0 shadow-sm flex items-center px-6"
+          class="main-header flex-shrink-0 shadow-sm flex items-center px-6"
         >
-          <h2 class="text-xl font-semibold text-gray-800">
+          <h2 class="text-xl font-semibold text-[var(--text-main)]">
             Riverside Resort & Campground
           </h2>
         </header>
 
-        <!-- MAIN CONTENT -->
-        <main class="flex-1 overflow-y-auto p-6 lg:p-8 bg-gray-50">
-          <!-- HOMEPAGE CONTENT -->
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto p-6 lg:p-8 bg-[var(--bg-body)]">
+          <!-- Homepage Content -->
           <div id="content-homepage" class="tab-content">
             <div class="max-w-3xl mx-auto">
               <div class="mb-8">
                 <h1
-                  class="text-2xl md:text-3xl font-semibold text-gray-900 mb-2"
+                  class="text-2xl md:text-3xl font-semibold text-[var(--text-main)] mb-2"
                 >
                   Update your content easily
                 </h1>
-                <p class="text-gray-500 text-sm">
+                <p class="text-[var(--text-faint)] text-sm">
                   Manage your homepage details from here.
                 </p>
               </div>
               <form
-                class="space-y-6 bg-white border border-gray-200 rounded-xl p-6 md:p-8 shadow-sm"
+                class="space-y-6 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-6 md:p-8 shadow-sm"
               >
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
                     >Welcome Heading</label
                   >
                   <input
                     type="text"
                     placeholder="Enter welcome heading"
-                    class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                    class="form-input w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition-colors"
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
                     >Heading</label
                   >
                   <input
                     type="text"
                     placeholder="Enter main heading"
-                    class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                    class="form-input w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition-colors"
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
                     >Content</label
                   >
                   <textarea
                     rows="4"
                     placeholder="Enter content..."
-                    class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors resize-y"
+                    class="form-input w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition-colors resize-y"
                   ></textarea>
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
                     >About Heading</label
                   >
                   <input
                     type="text"
                     placeholder="Enter about heading"
-                    class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                    class="form-input w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition-colors"
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
                     >About Content</label
                   >
                   <textarea
                     rows="4"
                     placeholder="Enter about content..."
-                    class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors resize-y"
+                    class="form-input w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition-colors resize-y"
                   ></textarea>
                 </div>
                 <div class="pt-2 flex justify-end">
                   <button
                     type="submit"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
+                    class="bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
                   >
                     Save Changes
                   </button>
@@ -299,24 +420,25 @@
             </div>
           </div>
 
-          <!-- ABOUT OWNER CONTENT -->
+          <!-- About Owner Content -->
           <div id="content-about-owner" class="tab-content hidden">
             <div class="max-w-3xl mx-auto">
               <div class="mb-8">
                 <h1
-                  class="text-2xl md:text-3xl font-semibold text-gray-900 mb-2"
+                  class="text-2xl md:text-3xl font-semibold text-[var(--text-main)] mb-2"
                 >
                   About Owner
                 </h1>
-                <p class="text-gray-500 text-sm">
+                <p class="text-[var(--text-faint)] text-sm">
                   Update owner details and image.
                 </p>
               </div>
               <form
-                class="space-y-6 bg-white border border-gray-200 rounded-xl p-6 md:p-8 shadow-sm"
+                class="space-y-6 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-6 md:p-8 shadow-sm"
               >
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-3"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-3"
                     >Owner Image</label
                   >
                   <div class="flex items-center gap-6">
@@ -324,7 +446,7 @@
                       id="owner-image-preview"
                       src="https://picsum.photos/seed/owner-resort/150/150.jpg"
                       alt="Owner"
-                      class="w-24 h-24 rounded-full object-cover border-2 border-gray-200"
+                      class="w-24 h-24 rounded-full object-cover border-2 border-[var(--border-color)]"
                     />
                     <div>
                       <input
@@ -339,7 +461,7 @@
                         onclick="
                           document.getElementById('owner-image-input').click()
                         "
-                        class="bg-gray-100 border border-gray-200 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center gap-2"
+                        class="bg-gray-100 border border-[var(--border-color)] hover:bg-gray-200 text-[var(--text-main)] px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center gap-2"
                       >
                         <span
                           class="iconify text-base"
@@ -347,36 +469,38 @@
                         ></span>
                         Choose File
                       </button>
-                      <p class="text-xs text-gray-500 mt-2">
+                      <p class="text-xs text-[var(--text-faint)] mt-2">
                         JPG, PNG or GIF. Max 2MB.
                       </p>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
                     >Heading</label
                   >
                   <input
                     type="text"
                     placeholder="Enter owner heading"
-                    class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                    class="form-input w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition-colors"
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
                     >Content</label
                   >
                   <textarea
                     rows="4"
                     placeholder="Enter owner content..."
-                    class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors resize-y"
+                    class="form-input w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition-colors resize-y"
                   ></textarea>
                 </div>
                 <div class="pt-2 flex justify-end">
                   <button
                     type="submit"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
+                    class="bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
                   >
                     Save Changes
                   </button>
@@ -385,37 +509,39 @@
             </div>
           </div>
 
-          <!-- EDIT PROPERTY CONTENT -->
+          <!-- Edit Property Content -->
           <div id="content-edit-property" class="tab-content hidden">
             <div class="max-w-4xl mx-auto">
               <div class="mb-8">
                 <h1
-                  class="text-2xl md:text-3xl font-semibold text-gray-900 mb-2"
+                  class="text-2xl md:text-3xl font-semibold text-[var(--text-main)] mb-2"
                 >
                   Edit Property
                 </h1>
-                <p class="text-gray-500 text-sm">
+                <p class="text-[var(--text-faint)] text-sm">
                   View and manage your property listings.
                 </p>
               </div>
               <div
-                class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm"
+                class="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl overflow-hidden shadow-sm"
               >
                 <table class="w-full text-left">
-                  <thead class="border-b border-gray-200 bg-gray-50">
+                  <thead
+                    class="border-b border-[var(--border-color)] bg-[var(--bg-input)]"
+                  >
                     <tr>
                       <th
-                        class="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider w-20"
+                        class="px-6 py-4 text-xs font-medium text-[var(--text-faint)] uppercase tracking-wider w-20"
                       >
                         Sr. No.
                       </th>
                       <th
-                        class="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        class="px-6 py-4 text-xs font-medium text-[var(--text-faint)] uppercase tracking-wider"
                       >
                         Property Name
                       </th>
                       <th
-                        class="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider text-right"
+                        class="px-6 py-4 text-xs font-medium text-[var(--text-faint)] uppercase tracking-wider text-right"
                       >
                         Action
                       </th>
@@ -423,13 +549,17 @@
                   </thead>
                   <tbody class="divide-y divide-gray-100">
                     <tr class="hover:bg-gray-50 transition-colors">
-                      <td class="px-6 py-4 text-sm text-gray-500">1</td>
-                      <td class="px-6 py-4 text-sm text-gray-900 font-medium">
+                      <td class="px-6 py-4 text-sm text-[var(--text-faint)]">
+                        1
+                      </td>
+                      <td
+                        class="px-6 py-4 text-sm text-[var(--text-main)] font-medium"
+                      >
                         Riverside Deluxe Villa
                       </td>
                       <td class="px-6 py-4 text-sm text-right">
                         <button
-                          class="text-indigo-600 hover:text-indigo-800 transition-colors inline-flex items-center gap-1.5"
+                          class="text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition-colors inline-flex items-center gap-1.5"
                         >
                           <span
                             class="iconify text-sm"
@@ -440,13 +570,17 @@
                       </td>
                     </tr>
                     <tr class="hover:bg-gray-50 transition-colors">
-                      <td class="px-6 py-4 text-sm text-gray-500">2</td>
-                      <td class="px-6 py-4 text-sm text-gray-900 font-medium">
+                      <td class="px-6 py-4 text-sm text-[var(--text-faint)]">
+                        2
+                      </td>
+                      <td
+                        class="px-6 py-4 text-sm text-[var(--text-main)] font-medium"
+                      >
                         Lakeview Cottage
                       </td>
                       <td class="px-6 py-4 text-sm text-right">
                         <button
-                          class="text-indigo-600 hover:text-indigo-800 transition-colors inline-flex items-center gap-1.5"
+                          class="text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition-colors inline-flex items-center gap-1.5"
                         >
                           <span
                             class="iconify text-sm"
@@ -457,13 +591,17 @@
                       </td>
                     </tr>
                     <tr class="hover:bg-gray-50 transition-colors">
-                      <td class="px-6 py-4 text-sm text-gray-500">3</td>
-                      <td class="px-6 py-4 text-sm text-gray-900 font-medium">
+                      <td class="px-6 py-4 text-sm text-[var(--text-faint)]">
+                        3
+                      </td>
+                      <td
+                        class="px-6 py-4 text-sm text-[var(--text-main)] font-medium"
+                      >
                         Garden Suite
                       </td>
                       <td class="px-6 py-4 text-sm text-right">
                         <button
-                          class="text-indigo-600 hover:text-indigo-800 transition-colors inline-flex items-center gap-1.5"
+                          class="text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition-colors inline-flex items-center gap-1.5"
                         >
                           <span
                             class="iconify text-sm"
@@ -474,13 +612,17 @@
                       </td>
                     </tr>
                     <tr class="hover:bg-gray-50 transition-colors">
-                      <td class="px-6 py-4 text-sm text-gray-500">4</td>
-                      <td class="px-6 py-4 text-sm text-gray-900 font-medium">
+                      <td class="px-6 py-4 text-sm text-[var(--text-faint)]">
+                        4
+                      </td>
+                      <td
+                        class="px-6 py-4 text-sm text-[var(--text-main)] font-medium"
+                      >
                         Mountain Retreat Cabin
                       </td>
                       <td class="px-6 py-4 text-sm text-right">
                         <button
-                          class="text-indigo-600 hover:text-indigo-800 transition-colors inline-flex items-center gap-1.5"
+                          class="text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition-colors inline-flex items-center gap-1.5"
                         >
                           <span
                             class="iconify text-sm"
@@ -496,56 +638,59 @@
             </div>
           </div>
 
-          <!-- CONTACT US CONTENT -->
+          <!-- Contact Us Content -->
           <div id="content-contact-us" class="tab-content hidden">
             <div class="max-w-3xl mx-auto">
               <div class="mb-8">
                 <h1
-                  class="text-2xl md:text-3xl font-semibold text-gray-900 mb-2"
+                  class="text-2xl md:text-3xl font-semibold text-[var(--text-main)] mb-2"
                 >
                   Contact Us
                 </h1>
-                <p class="text-gray-500 text-sm">
+                <p class="text-[var(--text-faint)] text-sm">
                   Update your contact details.
                 </p>
               </div>
               <form
-                class="space-y-6 bg-white border border-gray-200 rounded-xl p-6 md:p-8 shadow-sm"
+                class="space-y-6 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-6 md:p-8 shadow-sm"
               >
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
                     >Email to show on website</label
                   >
                   <input
                     type="email"
                     placeholder="Enter public email"
-                    class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                    class="form-input w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition-colors"
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
                     >Inquiry Email</label
                   >
                   <input
                     type="email"
                     placeholder="Enter inquiry email"
-                    class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                    class="form-input w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition-colors"
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
                     >Phone</label
                   >
                   <input
                     type="tel"
                     placeholder="Enter phone number"
-                    class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                    class="form-input w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition-colors"
                   />
                 </div>
                 <div class="pt-2 flex justify-end">
                   <button
                     type="submit"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
+                    class="bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
                   >
                     Save Changes
                   </button>
@@ -554,24 +699,25 @@
             </div>
           </div>
 
-          <!-- SOCIAL LINKS CONTENT -->
+          <!-- Social Links Content -->
           <div id="content-social-links" class="tab-content hidden">
             <div class="max-w-3xl mx-auto">
               <div class="mb-8">
                 <h1
-                  class="text-2xl md:text-3xl font-semibold text-gray-900 mb-2"
+                  class="text-2xl md:text-3xl font-semibold text-[var(--text-main)] mb-2"
                 >
                   Social Links
                 </h1>
-                <p class="text-gray-500 text-sm">
+                <p class="text-[var(--text-faint)] text-sm">
                   Update your social media profiles.
                 </p>
               </div>
               <form
-                class="space-y-6 bg-white border border-gray-200 rounded-xl p-6 md:p-8 shadow-sm"
+                class="space-y-6 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-6 md:p-8 shadow-sm"
               >
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
                     >Facebook</label
                   >
                   <div class="relative">
@@ -579,19 +725,20 @@
                       class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
                     >
                       <span
-                        class="iconify text-lg text-gray-400"
+                        class="iconify text-lg text-[var(--text-faint)]"
                         data-icon="lucide:facebook"
                       ></span>
                     </div>
                     <input
                       type="url"
                       placeholder="Enter Facebook URL"
-                      class="w-full bg-gray-50 border border-gray-300 rounded-lg pl-10 pr-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                      class="form-input w-full rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition-colors"
                     />
                   </div>
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
                     >LinkedIn</label
                   >
                   <div class="relative">
@@ -599,21 +746,21 @@
                       class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
                     >
                       <span
-                        class="iconify text-lg text-gray-400"
+                        class="iconify text-lg text-[var(--text-faint)]"
                         data-icon="lucide:linkedin"
                       ></span>
                     </div>
                     <input
                       type="url"
                       placeholder="Enter LinkedIn URL"
-                      class="w-full bg-gray-50 border border-gray-300 rounded-lg pl-10 pr-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                      class="form-input w-full rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition-colors"
                     />
                   </div>
                 </div>
                 <div class="pt-2 flex justify-end">
                   <button
                     type="submit"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
+                    class="bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
                   >
                     Save Changes
                   </button>
@@ -622,24 +769,25 @@
             </div>
           </div>
 
-          <!-- PROFILE CONTENT -->
+          <!-- Profile Content -->
           <div id="content-profile" class="tab-content hidden">
             <div class="max-w-3xl mx-auto">
               <div class="mb-8">
                 <h1
-                  class="text-2xl md:text-3xl font-semibold text-gray-900 mb-2"
+                  class="text-2xl md:text-3xl font-semibold text-[var(--text-main)] mb-2"
                 >
                   Profile
                 </h1>
-                <p class="text-gray-500 text-sm">
+                <p class="text-[var(--text-faint)] text-sm">
                   Update your admin profile details.
                 </p>
               </div>
               <form
-                class="space-y-6 bg-white border border-gray-200 rounded-xl p-6 md:p-8 shadow-sm"
+                class="space-y-6 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-6 md:p-8 shadow-sm"
               >
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-3"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-3"
                     >Profile Picture</label
                   >
                   <div class="flex items-center gap-6">
@@ -647,7 +795,7 @@
                       id="admin-image-preview"
                       src="https://picsum.photos/seed/admin-avatar/150/150.jpg"
                       alt="Admin"
-                      class="w-24 h-24 rounded-full object-cover border-2 border-gray-200"
+                      class="w-24 h-24 rounded-full object-cover border-2 border-[var(--border-color)]"
                     />
                     <div>
                       <input
@@ -662,7 +810,7 @@
                         onclick="
                           document.getElementById('admin-image-input').click()
                         "
-                        class="bg-gray-100 border border-gray-200 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center gap-2"
+                        class="bg-gray-100 border border-[var(--border-color)] hover:bg-gray-200 text-[var(--text-main)] px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center gap-2"
                       >
                         <span
                           class="iconify text-base"
@@ -670,36 +818,38 @@
                         ></span>
                         Choose File
                       </button>
-                      <p class="text-xs text-gray-500 mt-2">
+                      <p class="text-xs text-[var(--text-faint)] mt-2">
                         JPG, PNG or GIF. Max 2MB.
                       </p>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
                     >Name</label
                   >
                   <input
                     type="text"
                     placeholder="Enter your name"
-                    class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                    class="form-input w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition-colors"
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
                     >Website Name</label
                   >
                   <input
                     type="text"
                     placeholder="Enter website name"
-                    class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                    class="form-input w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition-colors"
                   />
                 </div>
                 <div class="pt-2 flex justify-end">
                   <button
                     type="submit"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
+                    class="bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
                   >
                     Save Changes
                   </button>
@@ -708,56 +858,59 @@
             </div>
           </div>
 
-          <!-- SETTINGS CONTENT -->
+          <!-- Settings Content -->
           <div id="content-settings" class="tab-content hidden">
             <div class="max-w-3xl mx-auto">
               <div class="mb-8">
                 <h1
-                  class="text-2xl md:text-3xl font-semibold text-gray-900 mb-2"
+                  class="text-2xl md:text-3xl font-semibold text-[var(--text-main)] mb-2"
                 >
                   Settings
                 </h1>
-                <p class="text-gray-500 text-sm">
+                <p class="text-[var(--text-faint)] text-sm">
                   Update your login credentials.
                 </p>
               </div>
               <form
-                class="space-y-6 bg-white border border-gray-200 rounded-xl p-6 md:p-8 shadow-sm"
+                class="space-y-6 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-6 md:p-8 shadow-sm"
               >
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
                     >User Login Email</label
                   >
                   <input
                     type="email"
                     placeholder="Enter login email"
-                    class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                    class="form-input w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition-colors"
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
                     >New Password</label
                   >
                   <input
                     type="password"
                     placeholder="Enter new password"
-                    class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                    class="form-input w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition-colors"
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  <label
+                    class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
                     >Confirm Password</label
                   >
                   <input
                     type="password"
                     placeholder="Confirm new password"
-                    class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                    class="form-input w-full rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition-colors"
                   />
                 </div>
                 <div class="pt-2 flex justify-end">
                   <button
                     type="submit"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
+                    class="bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
                   >
                     Update Settings
                   </button>
@@ -769,11 +922,20 @@
       </div>
     </div>
 
+    <!-- ==================== SCRIPTS ==================== -->
     <script>
+      // --- UI Toggles ---
       function toggleSidebar() {
-        document.getElementById("sidebar").classList.toggle("collapsed");
+        const sidebar = document.getElementById("sidebar");
+        sidebar.classList.toggle("collapsed");
+
+        const isCollapsed = sidebar.classList.contains("collapsed");
+        document.getElementById("toggle-tooltip").textContent = isCollapsed
+          ? "Expand Sidebar"
+          : "Collapse Sidebar";
       }
 
+      // --- Tab Navigation ---
       function switchTab(tabName, element) {
         // Hide all tab contents
         document
@@ -787,21 +949,28 @@
 
         // Reset all main nav links styling
         document.querySelectorAll(".main-nav-link").forEach((el) => {
-          el.classList.remove("bg-indigo-50", "text-indigo-700");
-          el.classList.add("text-gray-600");
+          el.classList.remove(
+            "bg-[var(--color-primary-light)]",
+            "text-[var(--color-primary-text)]",
+          );
+          el.classList.add("text-[var(--text-muted)]");
           const icon = el.querySelector(".iconify");
-          if (icon) icon.classList.remove("text-indigo-600");
+          if (icon) icon.classList.remove("text-[var(--color-primary)]");
         });
 
         // Set active styling for clicked link
         if (element) {
-          element.classList.add("bg-indigo-50", "text-indigo-700");
-          element.classList.remove("text-gray-600");
+          element.classList.add(
+            "bg-[var(--color-primary-light)]",
+            "text-[var(--color-primary-text)]",
+          );
+          element.classList.remove("text-[var(--text-muted)]");
           const icon = element.querySelector(".iconify");
-          if (icon) icon.classList.add("text-indigo-600");
+          if (icon) icon.classList.add("text-[var(--color-primary)]");
         }
       }
 
+      // --- Image Previews ---
       function previewOwnerImage(event) {
         const file = event.target.files[0];
         if (file) {
