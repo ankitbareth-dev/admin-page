@@ -9,20 +9,48 @@
     <style>
       /* Sidebar Collapse Logic */
       #sidebar {
-        transition: width 300ms ease-in-out;
+        transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1); /* Smoother easing curve */
+        overflow-x: hidden; /* Prevents horizontal scrollbar during transition */
       }
       #sidebar.collapsed {
         width: 5rem; /* 80px */
       }
-      #sidebar.collapsed .nav-text,
-      #sidebar.collapsed .sidebar-title {
-        display: none;
+
+      /* Smooth text and gap transitions */
+      .nav-item {
+        transition:
+          padding 300ms ease,
+          gap 300ms ease;
       }
+
+      .nav-text,
+      .sidebar-title-rest {
+        transition:
+          max-width 300ms cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 200ms ease,
+          margin-left 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        max-width: 200px;
+        opacity: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        margin-left: 0.75rem; /* Equivalent to gap-3 */
+      }
+
+      /* Collapsed state animations */
+      #sidebar.collapsed .nav-text,
+      #sidebar.collapsed .sidebar-title-rest {
+        max-width: 0;
+        opacity: 0;
+        margin-left: 0; /* Smoothly removes the gap */
+      }
+
       #sidebar.collapsed .nav-item {
         justify-content: center;
         padding-left: 0;
         padding-right: 0;
+        gap: 0; /* Removes gap so icon centers perfectly */
       }
+
       #sidebar.collapsed #toggle-icon {
         transform: rotate(180deg);
       }
@@ -38,12 +66,19 @@
         id="sidebar"
         class="w-64 bg-white border-r border-gray-200 flex flex-col flex-shrink-0 relative shadow-sm"
       >
-        <!-- Top: Riverside Resort -->
-        <div class="h-16 flex items-center px-4 border-b border-gray-200">
-          <span
-            class="sidebar-title text-lg font-semibold text-gray-900 whitespace-nowrap"
-            >Riverside Resort</span
-          >
+        <!-- Top: Logo & Resort Name -->
+        <div
+          class="h-16 flex items-center justify-center border-b border-gray-200 overflow-hidden"
+        >
+          <div class="flex items-center px-4">
+            <span
+              class="iconify text-2xl text-indigo-600 flex-shrink-0"
+              data-icon="lucide:tent"
+            ></span>
+            <span class="sidebar-title-rest text-lg font-semibold text-gray-900"
+              >Riverside Resort</span
+            >
+          </div>
         </div>
 
         <!-- Navigation -->
