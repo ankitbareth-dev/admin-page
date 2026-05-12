@@ -1,0 +1,62 @@
+<div class="max-w-3xl mx-auto">
+  <div class="mb-8">
+    <h1 class="text-2xl md:text-3xl font-semibold text-[var(--text-main)] mb-2">
+      Social Links
+    </h1>
+    <p class="text-[var(--text-faint)] text-sm">
+      Update your social media profiles.
+    </p>
+  </div>
+  <form
+    class="space-y-6 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-6 md:p-8 shadow-sm"
+  >
+    <div>
+      <label class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
+        >Facebook</label
+      >
+      <div class="relative">
+        <div
+          class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+        >
+          <span
+            class="iconify text-lg text-[var(--text-faint)]"
+            data-icon="lucide:facebook"
+          ></span>
+        </div>
+        <input
+          type="url"
+          placeholder="Enter Facebook URL"
+          class="form-input w-full rounded-lg pl-10 pr-4 py-2.5 text-sm transition-colors"
+        />
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
+        >LinkedIn</label
+      >
+      <div class="relative">
+        <div
+          class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+        >
+          <span
+            class="iconify text-lg text-[var(--text-faint)]"
+            data-icon="lucide:linkedin"
+          ></span>
+        </div>
+        <input
+          type="url"
+          placeholder="Enter LinkedIn URL"
+          class="form-input w-full rounded-lg pl-10 pr-4 py-2.5 text-sm transition-colors"
+        />
+      </div>
+    </div>
+    <div class="pt-2 flex justify-end">
+      <button
+        type="submit"
+        class="bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
+      >
+        Save Changes
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <style>
+      :root {
+        --bg-body: #f9fafb;
+        --bg-sidebar: #ffffff;
+        --bg-header: #ffffff;
+        --bg-card: #ffffff;
+        --bg-input: #f9fafb;
+        --bg-tooltip: #1f2937;
+        --color-primary: #4f46e5;
+        --color-primary-hover: #4338ca;
+        --color-primary-light: #eef2ff;
+        --color-primary-text: #4338ca;
+        --text-main: #111827;
+        --text-muted: #4b5563;
+        --text-faint: #6b7280;
+        --text-placeholder: #9ca3af;
+        --text-white: #ffffff;
+        --border-color: #e5e7eb;
+        --color-danger: #dc2626;
+        --color-danger-light: #fef2f2;
+        --sidebar-width: 16rem;
+        --sidebar-collapsed-width: 5rem;
+        --header-height: 4rem;
+      }
+      body {
+        background-color: var(--bg-body);
+        color: var(--text-main);
+      }
+      #sidebar {
+        width: var(--sidebar-width);
+        background-color: var(--bg-sidebar);
+        border-right: 1px solid var(--border-color);
+        transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      #sidebar.collapsed {
+        width: var(--sidebar-collapsed-width);
+      }
+      .main-header {
+        height: var(--header-height);
+        background-color: var(--bg-header);
+        border-bottom: 1px solid var(--border-color);
+      }
+      .nav-item {
+        transition:
+          padding 300ms ease,
+          gap 300ms ease;
+      }
+      .nav-text,
+      .sidebar-title-rest {
+        transition:
+          max-width 300ms cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 200ms ease,
+          margin-left 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        max-width: 200px;
+        opacity: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        margin-left: 0.75rem;
+      }
+      #sidebar.collapsed .nav-text,
+      #sidebar.collapsed .sidebar-title-rest {
+        max-width: 0;
+        opacity: 0;
+        margin-left: 0;
+      }
+      #sidebar.collapsed .nav-item {
+        justify-content: center;
+        padding-left: 0;
+        padding-right: 0;
+        gap: 0;
+      }
+      #sidebar.collapsed #toggle-icon {
+        transform: rotate(180deg);
+      }
+      .logo-container {
+        overflow: hidden;
+      }
+      .nav-tooltip {
+        position: absolute;
+        left: calc(100% + 16px);
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--bg-tooltip);
+        color: var(--text-white);
+        font-size: 12px;
+        padding: 6px 12px;
+        border-radius: 6px;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 200ms ease;
+        z-index: 50;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      .nav-tooltip::before {
+        content: "";
+        position: absolute;
+        right: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        border: 5px solid transparent;
+        border-right-color: var(--bg-tooltip);
+      }
+      #sidebar.collapsed .nav-item:hover .nav-tooltip,
+      .toggle-btn:hover .nav-tooltip {
+        opacity: 1;
+      }
+      .form-input {
+        background-color: var(--bg-input);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+      }
+      .form-input::placeholder {
+        color: var(--text-placeholder);
+      }
+      .form-input:focus {
+        border-color: var(--color-primary);
+        outline: none;
+        box-shadow: 0 0 0 1px var(--color-primary);
+      }
+    </style>
+  </head>
+  <body class="font-sans antialiased h-screen overflow-hidden">
+    <div class="flex h-screen">
+      <!-- SIDEBAR -->
+      <aside
+        id="sidebar"
+        class="flex flex-col flex-shrink-0 relative shadow-sm"
+      >
+        <div
+          class="logo-container h-16 flex items-center justify-center border-b border-[var(--border-color)]"
+        >
+          <div class="flex items-center px-4">
+            <span
+              class="iconify text-2xl text-[var(--color-primary)] flex-shrink-0"
+              data-icon="lucide:tent"
+            ></span>
+            <span
+              class="sidebar-title-rest text-lg font-semibold text-[var(--text-main)]"
+              >Riverside Resort</span
+            >
+          </div>
+        </div>
+        <nav
+          class="flex-1 py-4 px-2 space-y-1 overflow-y-auto overflow-x-hidden"
+        >
+          <a
+            href="#"
+            onclick="loadPage('homepage', this)"
+            class="nav-item main-nav-link group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-gray-100 transition-colors"
+          >
+            <span
+              class="iconify text-xl flex-shrink-0"
+              data-icon="lucide:layout-dashboard"
+            ></span>
+            <span class="nav-text text-sm whitespace-nowrap font-medium"
+              >Homepage</span
+            >
+            <span class="nav-tooltip">Homepage</span>
+          </a>
+          <a
+            href="#"
+            onclick="loadPage('about-owner', this)"
+            class="nav-item main-nav-link group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-gray-100 transition-colors"
+          >
+            <span
+              class="iconify text-xl flex-shrink-0"
+              data-icon="lucide:user"
+            ></span>
+            <span class="nav-text text-sm whitespace-nowrap">About Owner</span>
+            <span class="nav-tooltip">About Owner</span>
+          </a>
+          <a
+            href="#"
+            onclick="loadPage('edit-property', this)"
+            class="nav-item main-nav-link group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-gray-100 transition-colors"
+          >
+            <span
+              class="iconify text-xl flex-shrink-0"
+              data-icon="lucide:building"
+            ></span>
+            <span class="nav-text text-sm whitespace-nowrap"
+              >Edit Property</span
+            >
+            <span class="nav-tooltip">Edit Property</span>
+          </a>
+          <a
+            href="#"
+            onclick="loadPage('contact-us', this)"
+            class="nav-item main-nav-link group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-gray-100 transition-colors"
+          >
+            <span
+              class="iconify text-xl flex-shrink-0"
+              data-icon="lucide:mail"
+            ></span>
+            <span class="nav-text text-sm whitespace-nowrap">Contact Us</span>
+            <span class="nav-tooltip">Contact Us</span>
+          </a>
+          <a
+            href="#"
+            onclick="loadPage('social-links', this)"
+            class="nav-item main-nav-link group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-gray-100 transition-colors"
+          >
+            <span
+              class="iconify text-xl flex-shrink-0"
+              data-icon="lucide:share-2"
+            ></span>
+            <span class="nav-text text-sm whitespace-nowrap">Social Links</span>
+            <span class="nav-tooltip">Social Links</span>
+          </a>
+        </nav>
+        <div class="py-4 px-2 border-t border-[var(--border-color)] space-y-1">
+          <a
+            href="#"
+            onclick="loadPage('profile', this)"
+            class="nav-item main-nav-link group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-gray-100 transition-colors"
+          >
+            <span
+              class="iconify text-xl flex-shrink-0"
+              data-icon="lucide:user-circle"
+            ></span>
+            <span class="nav-text text-sm whitespace-nowrap">Profile</span>
+            <span class="nav-tooltip">Profile</span>
+          </a>
+          <a
+            href="#"
+            onclick="loadPage('settings', this)"
+            class="nav-item main-nav-link group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-gray-100 transition-colors"
+          >
+            <span
+              class="iconify text-xl flex-shrink-0"
+              data-icon="lucide:settings"
+            ></span>
+            <span class="nav-text text-sm whitespace-nowrap">Setting</span>
+            <span class="nav-tooltip">Setting</span>
+          </a>
+          <!-- LOGOUT: Redirects back to login -->
+          <a
+            href="index.html"
+            class="nav-item group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--color-danger)] hover:bg-[var(--color-danger-light)] transition-colors"
+          >
+            <span
+              class="iconify text-xl flex-shrink-0"
+              data-icon="lucide:log-out"
+            ></span>
+            <span class="nav-text text-sm whitespace-nowrap">Logout</span>
+            <span class="nav-tooltip">Logout</span>
+          </a>
+        </div>
+        <button
+          onclick="toggleSidebar()"
+          class="toggle-btn group absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[var(--bg-sidebar)] border border-[var(--border-color)] rounded-full flex items-center justify-center text-[var(--text-faint)] hover:text-[var(--text-main)] hover:border-gray-400 transition-all z-10 shadow-sm"
+        >
+          <span
+            id="toggle-icon"
+            class="iconify text-sm transition-transform duration-300"
+            data-icon="lucide:chevron-left"
+          ></span>
+          <span class="nav-tooltip" id="toggle-tooltip">Collapse Sidebar</span>
+        </button>
+      </aside>
+
+      <!-- MAIN AREA -->
+      <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <header
+          class="main-header flex-shrink-0 shadow-sm flex items-center px-6"
+        >
+          <h2 class="text-xl font-semibold text-[var(--text-main)]">
+            Riverside Resort & Campground
+          </h2>
+        </header>
+        <main
+          id="main-content"
+          class="flex-1 overflow-y-auto p-6 lg:p-8 bg-[var(--bg-body)]"
+        ></main>
+      </div>
+    </div>
+
+    <script>
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        sidebar.classList.toggle("collapsed");
+        const isCollapsed = sidebar.classList.contains("collapsed");
+        document.getElementById("toggle-tooltip").textContent = isCollapsed
+          ? "Expand Sidebar"
+          : "Collapse Sidebar";
+      }
+
+      const pageCache = {};
+
+      async function loadPage(pageName, element) {
+        const mainContent = document.getElementById("main-content");
+        if (pageCache[pageName]) {
+          mainContent.innerHTML = pageCache[pageName];
+          updateActiveTab(element);
+          return;
+        }
+        try {
+          const response = await fetch(`pages/${pageName}.html`);
+          const html = await response.text();
+          pageCache[pageName] = html;
+          mainContent.innerHTML = html;
+        } catch (error) {
+          mainContent.innerHTML =
+            '<p class="text-red-500 text-center mt-10">Error loading page.</p>';
+        }
+        updateActiveTab(element);
+      }
+
+      function updateActiveTab(element) {
+        document.querySelectorAll(".main-nav-link").forEach((el) => {
+          el.classList.remove(
+            "bg-[var(--color-primary-light)]",
+            "text-[var(--color-primary-text)]",
+          );
+          el.classList.add("text-[var(--text-muted)]");
+          const icon = el.querySelector(".iconify");
+          if (icon) icon.classList.remove("text-[var(--color-primary)]");
+        });
+        if (element) {
+          element.classList.add(
+            "bg-[var(--color-primary-light)]",
+            "text-[var(--color-primary-text)]",
+          );
+          element.classList.remove("text-[var(--text-muted)]");
+          const icon = element.querySelector(".iconify");
+          if (icon) icon.classList.add("text-[var(--color-primary)]");
+        }
+      }
+
+      function previewOwnerImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            document.getElementById("owner-image-preview").src =
+              e.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+      function previewAdminImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            document.getElementById("admin-image-preview").src =
+              e.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+
+      window.onload = () => {
+        const defaultLink = document.querySelector(".main-nav-link");
+        loadPage("homepage", defaultLink);
+      };
+    </script>
+  </body>
+</html>
