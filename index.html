@@ -13,22 +13,8 @@
       rel="stylesheet"
     />
     <style>
-      :root {
-        --bg-body: #f9fafb;
-        --bg-card: #ffffff;
-        --bg-input: #f9fafb;
-        --color-primary: #4f46e5;
-        --color-primary-hover: #4338ca;
-        --text-main: #111827;
-        --text-muted: #4b5563;
-        --text-faint: #6b7280;
-        --text-placeholder: #9ca3af;
-        --border-color: #e5e7eb;
-      }
       body {
         font-family: "Inter", sans-serif;
-        background-color: var(--bg-body);
-        color: var(--text-main);
       }
       h1,
       h2,
@@ -37,53 +23,53 @@
       }
 
       .form-input {
-        background-color: var(--bg-input);
-        border: 1px solid var(--border-color);
-        color: var(--text-main);
+        background-color: #ffffff; /* Crisp white input */
+        border: 1px solid #e2e8f0; /* Soft slate border */
+        color: #1e293b; /* Deep slate text */
         transition: all 200ms ease;
       }
       .form-input::placeholder {
-        color: var(--text-placeholder);
-      }
+        color: #cbd5e1;
+      } /* Light slate placeholder */
       .form-input:focus {
-        border-color: var(--color-primary);
+        border-color: #4f46e5;
         outline: none;
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        background-color: white;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
       }
 
       /* Custom Checkbox */
       .checkbox-custom:checked {
-        background-color: var(--color-primary);
-        border-color: var(--color-primary);
+        background-color: #4f46e5;
+        border-color: #4f46e5;
         background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
       }
     </style>
   </head>
-  <body class="antialiased h-screen overflow-hidden">
+  <body class="antialiased h-screen overflow-hidden bg-zinc-100">
     <div class="flex h-screen">
       <!-- ============================================================ -->
-      <!-- LEFT PANEL: Branding & Visual (Hidden on Mobile)             -->
+      <!-- LEFT PANEL: Deep Muted Slate (Hidden on Mobile)              -->
       <!-- ============================================================ -->
       <div
-        class="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-[var(--color-primary)]"
+        class="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-slate-900"
       >
         <!-- Background Image with Overlay -->
         <div
-          class="absolute inset-0 bg-cover bg-center"
+          class="absolute inset-0 bg-cover bg-center opacity-30"
           style="
-            background-image: url(&quot;https://picsum.photos/seed/riverside-luxury/1920/1080.jpg&quot;);
+            background-image: url(&quot;https://picsum.photos/seed/riverside-calm/1920/1080.jpg&quot;);
           "
         ></div>
+        <!-- Deep, moody gradient overlay -->
         <div
-          class="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)] via-[var(--color-primary)]/80 to-transparent"
+          class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-800/80"
         ></div>
 
         <!-- Content -->
         <div
-          class="relative z-10 flex flex-col justify-between w-full p-12 text-white"
+          class="relative z-10 flex flex-col justify-between w-full p-12 text-slate-300"
         >
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-3 text-white">
             <span class="iconify text-3xl" data-icon="lucide:tent"></span>
             <span class="text-xl font-heading font-semibold"
               >Riverside Resort</span
@@ -91,19 +77,21 @@
           </div>
 
           <div class="max-w-md">
-            <h2 class="text-4xl font-heading font-semibold leading-tight mb-4">
+            <h2
+              class="text-4xl font-heading font-semibold leading-tight mb-4 text-white"
+            >
               Manage your resort with elegance and ease.
             </h2>
-            <p class="text-white/70 text-lg leading-relaxed">
+            <p class="text-slate-400 text-lg leading-relaxed">
               Welcome to your central hub. Update properties, manage guest
               inquiries, and keep your resort profile pristine.
             </p>
 
             <!-- Testimonial / Feature -->
             <div
-              class="mt-10 p-6 bg-white/10 backdrop-blur-md rounded-xl border border-white/10"
+              class="mt-10 p-6 bg-white/5 backdrop-blur-md rounded-xl border border-white/10"
             >
-              <p class="text-sm text-white/80 italic mb-4">
+              <p class="text-sm text-slate-300 italic mb-4">
                 "This dashboard completely streamlined how we update our room
                 listings and handle guest contacts. An essential tool for our
                 team."
@@ -111,37 +99,36 @@
               <div class="flex items-center gap-3">
                 <img
                   src="https://picsum.photos/seed/owner-face/40/40.jpg"
-                  class="w-10 h-10 rounded-full object-cover border-2 border-white/20"
+                  class="w-10 h-10 rounded-full object-cover border-2 border-white/10"
                   alt="Manager"
                 />
                 <div>
                   <p class="text-sm font-medium text-white">Sarah Jenkins</p>
-                  <p class="text-xs text-white/60">Resort Manager</p>
+                  <p class="text-xs text-slate-500">Resort Manager</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="text-xs text-white/40">
+          <div class="text-xs text-slate-600">
             &copy; 2024 Riverside Resort. All rights reserved.
           </div>
         </div>
       </div>
 
       <!-- ============================================================ -->
-      <!-- RIGHT PANEL: Login Form                                      -->
+      <!-- RIGHT PANEL: Soft Gray Form Area                             -->
       <!-- ============================================================ -->
       <div
-        class="flex flex-col justify-center flex-1 px-4 sm:px-6 lg:px-20 xl:px-24 bg-white"
+        class="flex flex-col justify-center flex-1 px-4 sm:px-6 lg:px-20 xl:px-24 bg-zinc-100"
       >
-        <!-- Mobile Logo (Visible only on small screens) -->
+        <!-- Mobile Logo -->
         <div class="flex items-center justify-center gap-2 lg:hidden mb-8">
           <span
-            class="iconify text-2xl text-[var(--color-primary)]"
+            class="iconify text-2xl text-indigo-600"
             data-icon="lucide:tent"
           ></span>
-          <span
-            class="text-lg font-heading font-semibold text-[var(--text-main)]"
+          <span class="text-lg font-heading font-semibold text-slate-800"
             >Riverside Resort</span
           >
         </div>
@@ -150,11 +137,11 @@
           <!-- Header -->
           <div class="mb-8">
             <h1
-              class="text-2xl font-heading font-semibold tracking-tight text-[var(--text-main)]"
+              class="text-2xl font-heading font-semibold tracking-tight text-slate-800"
             >
               Welcome back
             </h1>
-            <p class="mt-2 text-sm text-[var(--text-faint)]">
+            <p class="mt-2 text-sm text-slate-400">
               Please enter your credentials to sign in.
             </p>
           </div>
@@ -165,7 +152,7 @@
             <div>
               <label
                 for="email"
-                class="block text-sm font-medium text-[var(--text-muted)] mb-1.5"
+                class="block text-sm font-medium text-slate-600 mb-1.5"
                 >Email Address</label
               >
               <div class="relative">
@@ -173,7 +160,7 @@
                   class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
                 >
                   <span
-                    class="iconify text-lg text-[var(--text-faint)]"
+                    class="iconify text-lg text-slate-400"
                     data-icon="lucide:mail"
                   ></span>
                 </div>
@@ -194,12 +181,12 @@
               <div class="flex items-center justify-between mb-1.5">
                 <label
                   for="password"
-                  class="block text-sm font-medium text-[var(--text-muted)]"
+                  class="block text-sm font-medium text-slate-600"
                   >Password</label
                 >
                 <a
                   href="#"
-                  class="text-sm font-medium text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition-colors"
+                  class="text-sm font-medium text-slate-400 hover:text-slate-600 transition-colors"
                   >Forgot password?</a
                 >
               </div>
@@ -208,7 +195,7 @@
                   class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
                 >
                   <span
-                    class="iconify text-lg text-[var(--text-faint)]"
+                    class="iconify text-lg text-slate-400"
                     data-icon="lucide:lock"
                   ></span>
                 </div>
@@ -225,7 +212,7 @@
                 <button
                   type="button"
                   id="togglePassword"
-                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-[var(--text-faint)] hover:text-[var(--text-muted)] transition-colors"
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
                 >
                   <span class="iconify text-lg" data-icon="lucide:eye"></span>
                 </button>
@@ -238,11 +225,9 @@
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                class="checkbox-custom h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                class="checkbox-custom h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
               />
-              <label
-                for="remember-me"
-                class="ml-2 block text-sm text-[var(--text-faint)]"
+              <label for="remember-me" class="ml-2 block text-sm text-slate-400"
                 >Remember me for 30 days</label
               >
             </div>
@@ -251,7 +236,7 @@
             <div>
               <button
                 type="submit"
-                class="w-full flex justify-center items-center gap-2 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                class="w-full flex justify-center items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-zinc-100"
               >
                 Log In
                 <span
@@ -269,13 +254,11 @@
       document
         .getElementById("loginForm")
         .addEventListener("submit", function (e) {
-          e.preventDefault(); // Prevent actual form submission
+          e.preventDefault();
 
-          // Add a brief visual cue that login is happening
           const btn = this.querySelector('button[type="submit"]');
           btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
 
-          // Simulate a network request before redirecting
           setTimeout(() => {
             window.location.href = "dashboard.html";
           }, 800);
@@ -292,7 +275,6 @@
             : "password";
         passwordInput.setAttribute("type", type);
 
-        // Change the icon
         const icon = this.querySelector(".iconify");
         icon.setAttribute(
           "data-icon",
